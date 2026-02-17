@@ -3,73 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>یوما | طعم اصیل خانگی</title>
+    <title>یوما | نسخه پیشرفته</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #fffafb; --text: #1e293b; --card: #ffffff; }
         .dark { --bg: #0f172a; --text: #f8fafc; --card: #1e293b; }
-        
-        body { font-family: 'Vazirmatn', sans-serif; background-color: var(--bg); color: var(--text); transition: background 0.4s, color 0.4s; }
+        body { font-family: 'Vazirmatn', sans-serif; background-color: var(--bg); color: var(--text); transition: all 0.4s; }
         .yuma-gradient { background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%); }
-        .hidden { display: none; }
-        .img-container { width: 100%; height: 140px; border-radius: 1.5rem; overflow: hidden; background: #fff1f2; position: relative; }
-        .product-card { background-color: var(--card); transition: background 0.4s; }
-        .product-img { width: 100%; height: 100%; object-fit: cover; position: relative; z-index: 10; opacity: 0; transition: opacity 0.3s; }
-        .emoji-fallback { position: absolute; inset: 0; display: flex; items-center; justify-content: center; font-size: 3rem; background: #fff1f2; z-index: 5; }
-        .dark .img-container, .dark .emoji-fallback { background: #334155; }
+        .img-container { width: 100%; height: 130px; border-radius: 1.5rem; overflow: hidden; background: #fff1f2; position: relative; }
+        .product-card { background-color: var(--card); border: 1px solid rgba(244, 63, 94, 0.1); }
+        .emoji-fallback { position: absolute; inset: 0; display: flex; items-center; justify-content: center; font-size: 2.5rem; z-index: 5; background: #fff1f2; }
+        .dark .emoji-fallback, .dark .img-container { background: #334155; }
     </style>
 </head>
-<body class="pb-48 text-right">
+<body class="pb-56">
 
-    <header class="p-6 bg-transparent sticky top-0 z-50 backdrop-blur-md border-b border-rose-100/20 flex justify-between items-center">
+    <header class="p-6 sticky top-0 z-50 backdrop-blur-md border-b border-rose-100/20 flex justify-between items-center">
         <div class="flex flex-col">
             <div class="flex gap-2 items-center">
                 <h1 class="text-2xl font-black text-purple-600 dark:text-purple-400">یوما</h1>
-                <svg width="35" height="35" viewBox="0 0 24 24" fill="none" class="text-rose-500">
-                    <path d="M4 17C4 17 5 19 12 19C19 19 20 17 20 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M3 15L21 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                    <circle cx="12" cy="9" r="2" fill="currentColor" opacity="0.3"/>
-                </svg>
             </div>
-            <span class="text-[9px] font-bold text-green-500 mt-0.5">طعم خانگی مادرانه</span>
+            <span class="text-[9px] font-bold text-green-500">طعم اصیل خانگی</span>
         </div>
-
-        <div class="flex items-center gap-3">
-            <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg transition-all active:scale-90 border border-rose-100/20 shadow-sm">
+        <div class="flex items-center gap-2">
+            <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg">
                 <span id="themeIcon">🌙</span>
             </button>
-            
             <div id="userInfo">
-                <button onclick="showAuth()" class="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-900/30 px-4 py-2.5 rounded-xl border border-rose-100/20">ورود</button>
+                <button onclick="showAuth()" class="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-900/30 px-4 py-2 rounded-xl">ورود</button>
             </div>
         </div>
     </header>
 
     <main class="p-6 grid grid-cols-2 gap-4" id="productGrid"></main>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/90 backdrop-blur-xl shadow-[0_-10px_40px_rgba(0,0,0,0.05)] rounded-t-[3rem] p-8 z-40">
+    <div class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-slate-900/95 backdrop-blur-xl shadow-2xl rounded-t-[3rem] p-8 z-40">
         <div id="totalPanel" class="flex justify-between items-center mb-6 opacity-40">
             <div class="flex items-center gap-2">
                 <span id="finalTotal" class="text-xl font-black text-rose-600">۰</span>
                 <span class="text-[10px] font-bold">تومان</span>
             </div>
+            <button onclick="showHistory()" class="text-[10px] font-black bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-lg">📋 تاریخچه سبد</button>
             <div class="flex items-center gap-2">
                 <span id="cartBadge" class="bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
                 <span class="text-2xl">🛒</span>
             </div>
         </div>
-        <button id="mainActionBtn" onclick="showAuth()" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg">وارد حساب شوید</button>
+        <button id="mainActionBtn" onclick="handleFinalAction()" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg">ابتدا وارد شوید</button>
     </div>
 
     <div id="authModal" class="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-6">
-        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl text-slate-800 dark:text-white">
-            <h2 class="text-xl font-black mb-6">خوش آمدید</h2>
+        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl">
+            <h2 class="text-xl font-black mb-6 dark:text-white text-right">خوش آمدید</h2>
             <div class="space-y-4">
-                <input type="text" id="authName" placeholder="نام شما" class="w-full border dark:border-slate-700 p-4 rounded-2xl outline-none font-bold bg-slate-50 dark:bg-slate-900">
-                <input type="tel" id="authPhone" placeholder="شماره موبایل" class="w-full border dark:border-slate-700 p-4 rounded-2xl outline-none font-bold text-left bg-slate-50 dark:bg-slate-900">
+                <input type="text" id="authName" placeholder="نام شما" class="w-full border dark:border-slate-700 p-4 rounded-2xl outline-none font-bold bg-slate-50 dark:bg-slate-900 dark:text-white">
+                <input type="tel" id="authPhone" placeholder="شماره موبایل" class="w-full border dark:border-slate-700 p-4 rounded-2xl outline-none font-bold text-left bg-slate-50 dark:bg-slate-900 dark:text-white">
                 <button onclick="handleAuth()" class="w-full yuma-gradient text-white py-4 rounded-2xl font-black">تایید و ورود</button>
-                <button onclick="closeAuth()" class="w-full text-slate-300 text-[10px] mt-2 text-center">بستن</button>
+                <button onclick="closeAuth()" class="w-full text-slate-400 text-[10px] mt-2 text-center">انصراف</button>
             </div>
         </div>
     </div>
@@ -87,8 +78,7 @@
 
         function toggleTheme() {
             document.body.classList.toggle('dark');
-            const isDark = document.body.classList.contains('dark');
-            document.getElementById('themeIcon').innerText = isDark ? '☀️' : '🌙';
+            document.getElementById('themeIcon').innerText = document.body.classList.contains('dark') ? '☀️' : '🌙';
         }
 
         function render() {
@@ -98,20 +88,28 @@
             grid.innerHTML = products.map(p => {
                 const count = cart[p.id] || 0;
                 return `
-                <div class="product-card p-3 rounded-[2.5rem] border border-rose-100/10 shadow-sm text-center relative overflow-hidden">
-                    ${isAdmin ? `<button onclick="removeProduct(${p.id})" class="absolute top-2 left-2 bg-red-500 text-white w-6 h-6 rounded-full text-[10px] z-30 font-bold">×</button>` : ''}
+                <div class="product-card p-3 rounded-[2.5rem] shadow-sm text-center relative overflow-hidden">
                     <div class="img-container mb-3 flex items-center justify-center">
                         <div class="emoji-fallback">${p.emoji}</div>
-                        <img src="${p.img}" class="product-img" onload="this.style.opacity=1" onerror="this.style.display='none'">
+                        <img src="${p.img}" class="product-img relative z-10 w-full h-full object-cover" onload="this.style.opacity=1" onerror="this.style.display='none'">
                     </div>
                     <h3 class="text-[11px] font-black mb-1">${p.name}</h3>
                     <p class="text-[10px] text-rose-400 font-bold mb-3">${p.price.toLocaleString()} تومان</p>
-                    <button onclick="addToCart(${p.id})" class="w-full bg-slate-900 dark:bg-rose-500 text-white py-2.5 rounded-2xl text-[9px] font-black ${!currentUser ? 'opacity-20' : 'active:scale-95'}">
-                        ${count > 0 ? `تعداد: ${count}` : '+ افزودن'}
-                    </button>
+                    
+                    <div class="flex items-center justify-between bg-slate-100 dark:bg-slate-800 rounded-2xl p-1">
+                        <button onclick="updateQty(${p.id}, 1)" class="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl shadow-sm text-xl font-bold">+</button>
+                        <span class="text-xs font-black">${count}</span>
+                        <button onclick="updateQty(${p.id}, -1)" class="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl shadow-sm text-xl font-bold">-</button>
+                    </div>
                 </div>`;
             }).join('');
             updateTotal();
+        }
+
+        function updateQty(id, change) {
+            if(!currentUser) return showAuth();
+            cart[id] = Math.max(0, (cart[id] || 0) + change);
+            render();
         }
 
         function handleAuth() {
@@ -120,18 +118,33 @@
             if(name.length < 2 || phone.length < 11) return alert("اطلاعات را کامل وارد کنید");
             
             currentUser = { name, phone };
-            const isAdmin = adminPhones.includes(phone);
             document.getElementById('authModal').classList.add('hidden');
-            document.getElementById('userInfo').innerHTML = `<span class="text-[9px] font-black text-slate-500 dark:text-slate-400">${name} عزیز</span>`;
-            document.getElementById('mainActionBtn').innerText = isAdmin ? "پنل مدیریت فعال" : "ثبت نهایی سفارش";
+            document.getElementById('userInfo').innerHTML = `<span class="text-[9px] font-black text-rose-500">${name} عزیز</span>`;
+            document.getElementById('mainActionBtn').innerText = "ثبت نهایی سفارش";
             document.getElementById('totalPanel').classList.remove('opacity-40');
             render();
         }
 
-        function addToCart(id) {
+        function handleFinalAction() {
             if(!currentUser) return showAuth();
-            cart[id] = (cart[id] || 0) + 1;
-            render();
+            if(Object.keys(cart).every(k => cart[k] === 0)) return alert("سبد خرید خالی است!");
+            showHistory();
+        }
+
+        function showHistory() {
+            if(!currentUser) return showAuth();
+            let summary = `📜 پیش‌فاکتور مشتری: ${currentUser.name}\n\n`;
+            let total = 0;
+            for(let id in cart) {
+                if(cart[id] > 0) {
+                    const p = products.find(x => x.id == id);
+                    summary += `▪️ ${p.name} (${cart[id]} عدد): ${(p.price * cart[id]).toLocaleString()} ت\n`;
+                    total += p.price * cart[id];
+                }
+            }
+            if(total === 0) return alert("هنوز چیزی انتخاب نکرده‌اید!");
+            summary += `\n💰 جمع کل: ${total.toLocaleString()} تومان`;
+            alert(summary);
         }
 
         function updateTotal() {
