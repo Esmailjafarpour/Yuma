@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>یوما | سبد خرید هوشمند</title>
+    <title>یوما | شیرینی خانگی با طعم مادرانه</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -16,22 +16,29 @@
 </head>
 <body class="pb-48">
 
+    <div id="historyModal" class="fixed inset-0 z-[300] bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-md rounded-[2.5rem] p-8 shadow-2xl max-h-[70vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-black text-slate-800">تاریخچه خریدهای شما</h2>
+                <button onclick="closeHistory()" class="text-rose-500 font-bold text-2xl">×</button>
+            </div>
+            <div id="historyList" class="space-y-4 text-right"></div>
+        </div>
+    </div>
+
     <div id="cartModal" class="fixed inset-0 z-[250] bg-black/60 backdrop-blur-sm hidden flex items-end justify-center">
-        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 modal-animate max-h-[80vh] overflow-y-auto">
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 modal-animate max-h-[80vh] overflow-y-auto text-right">
             <div class="flex justify-between items-center mb-6">
                 <h2 class="text-xl font-black text-slate-800">سبد خرید شما</h2>
-                <button onclick="closeCart()" class="text-slate-400 font-bold text-sm">بستن ×</button>
+                <button onclick="closeCart()" class="text-slate-400 font-bold">بستن ×</button>
             </div>
-            
-            <div id="cartItemsList" class="space-y-4 mb-8 text-right">
-                </div>
-
+            <div id="cartItemsList" class="space-y-4 mb-8"></div>
             <div class="border-t pt-6">
-                <div class="flex justify-between items-center mb-6 text-right">
+                <div class="flex justify-between items-center mb-6">
                     <span class="font-black text-slate-400 text-sm">جمع کل سفارش:</span>
                     <span id="cartModalTotal" class="text-xl font-black text-rose-600">۰ تومان</span>
                 </div>
-                <button onclick="submitOrder()" class="w-full yuma-gradient text-white py-4 rounded-2xl font-black shadow-lg">ثبت و نهایی کردن خرید</button>
+                <button onclick="submitOrder()" class="w-full yuma-gradient text-white py-4 rounded-2xl font-black shadow-lg shadow-rose-200">ثبت نهایی خرید</button>
             </div>
         </div>
     </div>
@@ -52,7 +59,7 @@
         </div>
     </div>
 
-    <header class="p-6 bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-rose-50 flex justify-between items-center">
+    <header class="p-6 bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-rose-50 flex justify-between items-center text-right">
         <div class="flex flex-col">
             <div class="flex gap-2 items-center">
                 <h1 class="text-2xl font-black text-purple-700 leading-none">یوما</h1>
@@ -67,24 +74,24 @@
             <span class="text-[10px] font-bold text-green-500 mt-1">شیرینی خانگی با طعم مادرانه</span>
         </div>
         <div id="userInfo" class="flex items-center gap-3">
-            <button onclick="showAuth('login')" class="text-[10px] font-bold text-rose-600 bg-rose-50 px-4 py-2 rounded-xl">ورود / ثبت‌نام</button>
+            <button onclick="showAuth('login')" class="text-[10px] font-bold text-rose-600 bg-rose-50 px-4 py-2 rounded-xl transition-all active:scale-95">ورود / ثبت‌نام</button>
         </div>
     </header>
 
     <main class="p-6 grid grid-cols-2 gap-4" id="productGrid"></main>
 
-    <div onclick="openCart()" class="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-20px_50px_rgba(0,0,0,0.1)] rounded-t-[3rem] p-8 z-40 text-right cursor-pointer">
+    <div id="bottomBar" onclick="openCart()" class="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-20px_50px_rgba(0,0,0,0.1)] rounded-t-[3rem] p-8 z-40 text-right cursor-pointer">
         <div id="totalPanel" class="flex justify-between items-center mb-6 opacity-40 transition-all">
             <div class="flex items-center gap-2">
                 <div class="relative">
                     <span class="text-2xl">🛒</span>
                     <span id="cartBadge" class="absolute -top-1 -right-1 bg-purple-600 text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
                 </div>
-                <span class="font-black text-slate-400 text-xs">مشاهده سبد خرید</span>
+                <span class="font-black text-slate-400 text-xs">مشاهده سبد</span>
             </div>
             <span id="finalTotal" class="text-xl font-black text-rose-600">۰ تومان</span>
         </div>
-        <button id="mainActionBtn" onclick="event.stopPropagation(); showAuth('login')" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg shadow-rose-200">
+        <button id="mainActionBtn" onclick="event.stopPropagation(); showAuth('login')" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg shadow-rose-200 active:scale-95 transition-all">
             برای ثبت سفارش وارد شوید
         </button>
     </div>
@@ -94,6 +101,7 @@
         let isLoginMode = true; 
         let users = { 'nader': '1234' }; 
         let cart = {};
+        let orderHistory = [];
 
         const products = [
             { id: 10, name: 'شیرینی شعریه', price: 120000, img: '🍮' },
@@ -104,55 +112,18 @@
             { id: 3, name: 'کیک ردولوت', price: 420000, img: '🍰' }
         ];
 
-        function openCart() {
-            if (Object.keys(cart).length === 0) return alert("سبد خرید شما هنوز خالی است!");
-            renderCartModal();
-            document.getElementById('cartModal').classList.remove('hidden');
-        }
-
-        function closeCart() { document.getElementById('cartModal').classList.add('hidden'); }
-
-        function renderCartModal() {
-            const list = document.getElementById('cartItemsList');
-            let html = '';
-            let total = 0;
-
-            for (let id in cart) {
-                const p = products.find(x => x.id == id);
-                const itemTotal = p.price * cart[id];
-                total += itemTotal;
-                html += `
-                <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl">
-                    <div class="flex items-center gap-3">
-                        <span class="text-2xl">${p.img}</span>
-                        <div>
-                            <h4 class="text-xs font-black text-slate-800">${p.name}</h4>
-                            <p class="text-[10px] text-slate-400">${p.price.toLocaleString()} تومان</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3 bg-white px-3 py-1 rounded-xl border">
-                        <button onclick="changeQty(${p.id}, 1)" class="text-rose-600 font-bold">+</button>
-                        <span class="text-xs font-black">${cart[id]}</span>
-                        <button onclick="changeQty(${p.id}, -1)" class="text-slate-400 font-bold">-</button>
-                    </div>
-                </div>`;
-            }
-            list.innerHTML = html;
-            document.getElementById('cartModalTotal').innerText = total.toLocaleString() + ' تومان';
-        }
-
         function render() {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = products.map(p => {
                 const count = cart[p.id] || 0;
                 return `
-                <div class="bg-white p-5 rounded-[2.5rem] border border-rose-50 shadow-sm text-center relative">
+                <div class="bg-white p-5 rounded-[2.5rem] border border-rose-50 shadow-sm text-center relative transition-all">
                     <div class="text-5xl mb-4 h-20 flex items-center justify-center bg-rose-50/50 rounded-3xl">${p.img}</div>
                     <h3 class="text-[11px] font-black text-slate-800 mb-1">${p.name}</h3>
                     <p class="text-[10px] text-rose-400 font-bold mb-4">${p.price.toLocaleString()} تومان</p>
                     <div class="${!isLoggedIn ? 'opacity-40' : ''}">
                         ${count === 0 ? 
-                            `<button onclick="event.stopPropagation(); ${isLoggedIn ? `changeQty(${p.id}, 1)` : 'showAuth(\'login\')'}" class="w-full bg-slate-900 text-white py-3 rounded-2xl text-[10px] font-black">+ افزودن</button>` :
+                            `<button onclick="event.stopPropagation(); ${isLoggedIn ? `changeQty(${p.id}, 1)` : 'showAuth(\'login\')'}" class="w-full bg-slate-900 text-white py-3 rounded-2xl text-[10px] font-black active:scale-95 transition-transform">+ افزودن</button>` :
                             `<div class="flex items-center justify-between bg-rose-600 rounded-2xl p-1 text-white">
                                 <button onclick="event.stopPropagation(); changeQty(${p.id}, 1)" class="w-8 h-8 flex items-center justify-center font-bold text-lg">+</button>
                                 <span class="text-xs font-black">${count}</span>
@@ -163,7 +134,6 @@
                 </div>`;
             }).join('');
             updateTotal();
-            if(!document.getElementById('cartModal').classList.contains('hidden')) renderCartModal();
         }
 
         function changeQty(id, delta) {
@@ -171,7 +141,8 @@
             cart[id] = (cart[id] || 0) + delta;
             if (cart[id] <= 0) delete cart[id];
             render();
-            if (Object.keys(cart).length === 0) closeCart();
+            if (Object.keys(cart).length === 0 && !document.getElementById('cartModal').classList.contains('hidden')) closeCart();
+            else if (!document.getElementById('cartModal').classList.contains('hidden')) renderCartModal();
         }
 
         function updateTotal() {
@@ -191,10 +162,11 @@
             const p = document.getElementById('authPassword').value;
             if (!u || !p) return alert("لطفاً فیلدها را پر کنید!");
             if (isLoginMode) {
-                if (users[u] && users[u] === p) { successLogin(u); } 
-                else { alert("نام کاربری یا رمز عبور اشتباه است!"); }
+                if (users[u] && users[u] === p) successLogin(u);
+                else alert("نام کاربری یا رمز عبور اشتباه است!");
             } else {
-                users[u] = p; alert("ثبت‌نام انجام شد! حالا وارد شوید.");
+                if (users[u]) return alert("این نام کاربری تکراری است!");
+                users[u] = p; alert("ثبت‌نام با موفقیت انجام شد! حالا وارد شوید.");
                 isLoginMode = true; updateAuthUI();
             }
         }
@@ -202,11 +174,96 @@
         function successLogin(username) {
             isLoggedIn = true;
             document.getElementById('authModal').classList.add('hidden');
-            document.getElementById('userInfo').innerHTML = `<span class="text-[10px] font-black text-slate-500">${username} خوش آمدی ✨</span>`;
-            document.getElementById('mainActionBtn').innerText = "ثبت نهایی سفارش در یوما";
+            document.getElementById('userInfo').innerHTML = `
+                <div class="flex flex-col items-end">
+                    <span class="text-[10px] font-black text-slate-500">${username} خوش آمدی ✨</span>
+                    <div class="flex gap-2">
+                        <button onclick="handleLogout()" class="text-[9px] text-rose-500 font-black underline">خروج</button>
+                        <button onclick="openHistory()" class="text-[9px] text-purple-600 font-black underline">تاریخچه خرید</button>
+                    </div>
+                </div>`;
+            document.getElementById('mainActionBtn').innerText = "ثبت نهایی سفارش";
             document.getElementById('mainActionBtn').onclick = (e) => { e.stopPropagation(); submitOrder(); };
             document.getElementById('totalPanel').classList.remove('opacity-40');
             render();
+        }
+
+        function handleLogout() {
+            if(confirm("آیا می‌خواهید از حساب خود خارج شوید؟")) {
+                isLoggedIn = false;
+                cart = {};
+                document.getElementById('userInfo').innerHTML = `<button onclick="showAuth('login')" class="text-[10px] font-bold text-rose-600 bg-rose-50 px-4 py-2 rounded-xl">ورود / ثبت‌نام</button>`;
+                document.getElementById('mainActionBtn').innerText = "برای ثبت سفارش وارد شوید";
+                document.getElementById('mainActionBtn').onclick = (e) => { e.stopPropagation(); showAuth('login'); };
+                document.getElementById('totalPanel').classList.add('opacity-40');
+                render();
+            }
+        }
+
+        function submitOrder() {
+            if (Object.keys(cart).length === 0) return alert("سبد خرید خالی است!");
+            const newOrder = {
+                id: Date.now(),
+                date: new Date().toLocaleDateString('fa-IR'),
+                time: new Date().toLocaleTimeString('fa-IR', {hour: '2-digit', minute:'2-digit'}),
+                items: Object.keys(cart).map(id => {
+                    const p = products.find(x => x.id == id);
+                    return { name: p.name, qty: cart[id] };
+                }),
+                total: document.getElementById('finalTotal').innerText
+            };
+            orderHistory.unshift(newOrder);
+            alert("سفارش شما با موفقیت ثبت شد! 🚀");
+            cart = {}; closeCart(); render();
+        }
+
+        function openHistory() {
+            const list = document.getElementById('historyList');
+            if (orderHistory.length === 0) {
+                list.innerHTML = `<p class="text-center text-slate-400 text-xs py-10">سفارشی یافت نشد.</p>`;
+            } else {
+                list.innerHTML = orderHistory.map(order => `
+                    <div class="border border-slate-100 p-4 rounded-2xl bg-slate-50 mb-3 shadow-sm">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-[10px] font-bold text-slate-400">${order.date} - ${order.time}</span>
+                            <span class="text-[10px] font-black text-emerald-600 font-bold">✓ تکمیل شده</span>
+                        </div>
+                        <div class="text-[11px] text-slate-700 space-y-1">
+                            ${order.items.map(item => `<div>• ${item.name} (${item.qty} عدد)</div>`).join('')}
+                        </div>
+                        <div class="mt-3 pt-2 border-t border-dashed flex justify-between items-center font-black">
+                            <span class="text-[10px] text-slate-400">مجموع:</span>
+                            <span class="text-xs text-rose-600">${order.total}</span>
+                        </div>
+                    </div>`).join('');
+            }
+            document.getElementById('historyModal').classList.remove('hidden');
+        }
+
+        function closeHistory() { document.getElementById('historyModal').classList.add('hidden'); }
+        function openCart() { if (Object.keys(cart).length > 0) { renderCartModal(); document.getElementById('cartModal').classList.remove('hidden'); } }
+        function closeCart() { document.getElementById('cartModal').classList.add('hidden'); }
+
+        function renderCartModal() {
+            const list = document.getElementById('cartItemsList');
+            let total = 0;
+            list.innerHTML = Object.keys(cart).map(id => {
+                const p = products.find(x => x.id == id);
+                total += (p.price * cart[id]);
+                return `
+                <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl mb-2 border border-slate-100">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">${p.img}</span>
+                        <div><h4 class="text-xs font-black text-slate-800">${p.name}</h4><p class="text-[10px] text-slate-400 font-bold">${p.price.toLocaleString()} ت</p></div>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white px-3 py-1 rounded-xl border">
+                        <button onclick="changeQty(${p.id}, 1)" class="text-rose-600 font-black text-lg">+</button>
+                        <span class="text-xs font-black">${cart[id]}</span>
+                        <button onclick="changeQty(${p.id}, -1)" class="text-slate-400 font-black text-lg">-</button>
+                    </div>
+                </div>`;
+            }).join('');
+            document.getElementById('cartModalTotal').innerText = total.toLocaleString() + ' تومان';
         }
 
         function showAuth(mode) { isLoginMode = (mode === 'login'); updateAuthUI(); document.getElementById('authModal').classList.remove('hidden'); }
@@ -215,14 +272,9 @@
             document.getElementById('authTitle').innerText = isLoginMode ? "ورود به یوما" : "عضویت در یوما";
             document.getElementById('authBtn').innerText = isLoginMode ? "تایید ورود" : "ایجاد حساب کاربری";
             document.getElementById('authToggleBtn').innerText = isLoginMode ? "ثبت‌نام کنید" : "وارد شوید";
+            document.getElementById('authQuestion').innerText = isLoginMode ? "حساب کاربری ندارید؟" : "قبلاً ثبت‌نام کرده‌اید؟";
         }
         function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
-
-        function submitOrder() {
-            if (Object.keys(cart).length === 0) return alert("سبد خرید خالی است!");
-            alert("نادر جان، سفارش با موفقیت ثبت شد! 🚀");
-            cart = {}; closeCart(); render();
-        }
 
         render();
     </script>
