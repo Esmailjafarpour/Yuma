@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>یوما | شیرینی خانگی نادر</title>
+    <title>یوما | طعم اصیل خانگی</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Vazirmatn', sans-serif; background-color: #fffafb; }
         .yuma-gradient { background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%); }
         .hidden { display: none; }
-        .product-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 1.5rem; }
+        .product-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 1.5rem; background-color: #ffe4e6; }
     </style>
 </head>
 <body class="pb-48 text-right">
 
-    <div id="adminModal" class="fixed inset-0 z-[400] bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6">
+    <div id="adminModal" class="fixed inset-0 z-[400] bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6 text-right">
         <div class="bg-white w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl">
-            <h2 class="text-xl font-black mb-6 text-slate-800">افزودن محصول جدید</h2>
+            <h2 class="text-xl font-black mb-6 text-slate-800 border-b pb-4 border-blue-50">افزودن محصول جدید (نادر)</h2>
             <div class="space-y-4">
                 <input type="text" id="pName" placeholder="نام شیرینی" class="w-full bg-slate-50 border p-4 rounded-2xl outline-none focus:border-blue-400 font-bold">
                 <input type="number" id="pPrice" placeholder="قیمت (تومان)" class="w-full bg-slate-50 border p-4 rounded-2xl outline-none focus:border-blue-400 font-bold">
-                <input type="text" id="pImgUrl" placeholder="لینک عکس محصول" class="w-full bg-slate-50 border p-4 rounded-2xl outline-none focus:border-blue-400 font-bold text-left">
-                <button onclick="addNewProduct()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black">ثبت در لیست محصولات</button>
+                <input type="text" id="pImgUrl" placeholder="لینک عکس جدید" class="w-full bg-slate-50 border p-4 rounded-2xl outline-none focus:border-blue-400 font-bold text-left">
+                <button onclick="addNewProduct()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-lg">ثبت نهایی در منو</button>
                 <button onclick="closeAdmin()" class="w-full text-slate-300 text-[10px] font-bold mt-2">انصراف</button>
             </div>
         </div>
@@ -31,10 +31,18 @@
     <header class="p-6 bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-rose-50 flex justify-between items-center">
         <div class="flex flex-col">
             <div class="flex gap-2 items-center">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-rose-500">
+                    <path d="M4 17C4 17 5 19 12 19C19 19 20 17 20 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M3 15L21 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M7 15C7 15 7 13 8 12C9 11 10 11 10 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M17 15C17 15 17 13 16 12C15 11 14 11 14 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <circle cx="12" cy="11" r="2" fill="currentColor" opacity="0.5"/>
+                    <circle cx="9" cy="12" r="1" fill="currentColor" opacity="0.5"/>
+                    <circle cx="15" cy="12" r="1" fill="currentColor" opacity="0.5"/>
+                </svg>
                 <h1 class="text-2xl font-black text-purple-700">یوما</h1>
-                <span class="text-2xl">🧁</span>
             </div>
-            <span class="text-[10px] font-bold text-green-500 mt-1">طعم اصیل شیرینی خانگی</span>
+            <span class="text-[10px] font-bold text-green-500 mt-1">تولید خانگی با عشق مادرانه</span>
         </div>
         <div id="userInfo">
             <button onclick="showAuth()" class="text-[10px] font-bold text-rose-600 bg-rose-50 px-4 py-2 rounded-xl">ورود / ثبت‌نام</button>
@@ -44,50 +52,47 @@
     <main class="p-6 grid grid-cols-2 gap-4" id="productGrid"></main>
 
     <div class="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-20px_50px_rgba(0,0,0,0.1)] rounded-t-[3rem] p-8 z-40">
-        <div id="totalPanel" class="flex justify-between items-center mb-6 opacity-40 transition-all">
+        <div id="totalPanel" class="flex justify-between items-center mb-6 opacity-40">
             <div class="flex items-center gap-2">
                 <span class="text-2xl">🛒</span>
                 <span id="cartBadge" class="bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
             </div>
             <span id="finalTotal" class="text-xl font-black text-rose-600">۰ تومان</span>
         </div>
-        <button id="mainActionBtn" onclick="showAuth()" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg">
-            برای سفارش وارد شوید
-        </button>
+        <button id="mainActionBtn" onclick="showAuth()" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg">ابتدا وارد حساب شوید</button>
     </div>
 
-    <div id="authModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6">
+    <div id="authModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6 text-right">
         <div class="bg-white w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl">
-            <h2 class="text-xl font-black mb-6">ورود به یوما</h2>
-            <input type="text" id="authName" placeholder="نام شما" class="w-full border p-4 rounded-2xl mb-4 outline-none font-bold">
-            <input type="tel" id="authPhone" placeholder="شماره موبایل" class="w-full border p-4 rounded-2xl mb-6 outline-none font-bold text-left">
-            <button onclick="handleAuth()" class="w-full yuma-gradient text-white py-4 rounded-2xl font-black">تایید و ورود</button>
+            <h2 class="text-xl font-black mb-4">ورود به سیستم</h2>
+            <input type="text" id="authName" placeholder="نام شما" class="w-full border p-4 rounded-2xl mb-3 outline-none font-bold">
+            <input type="tel" id="authPhone" placeholder="شماره موبایل (09337301641 ادمین)" class="w-full border p-4 rounded-2xl mb-6 outline-none font-bold text-left">
+            <button onclick="handleAuth()" class="w-full yuma-gradient text-white py-4 rounded-2xl font-black">تایید ورود</button>
+            <button onclick="closeAuth()" class="w-full text-slate-300 text-[10px] mt-4 font-bold">بستن</button>
         </div>
     </div>
 
     <script>
-        // تشخیص ادمین با شماره نادر
         const adminPhones = ['09337301641'];
 
-        // آرایه محصولات با عکس‌های مناسب
         let products = [
             { 
                 id: 1, 
-                name: 'شیرینی شعریه', 
+                name: 'شیرینی شعریه مخصوص', 
                 price: 120000, 
-                img: 'https://images.unsplash.com/photo-1559620192-032c4bc4674e?auto=format&fit=crop&w=400&q=80' 
+                img: 'https://img.freepik.com/free-photo/delicious-oriental-sweets-composition_23-2148873836.jpg?w=400' 
             },
             { 
                 id: 2, 
-                name: 'حلوا خرمایی', 
+                name: 'حلوا خرمایی مجلسی', 
                 price: 150000, 
-                img: 'https://images.unsplash.com/photo-1541773935662-47ea92954845?auto=format&fit=crop&w=400&q=80' 
+                img: 'https://img.freepik.com/free-photo/delicious-date-sweets-with-nuts_23-2148873815.jpg?w=400' 
             },
             { 
                 id: 3, 
-                name: 'دوا گرم (معجون)', 
+                name: 'دوا گرم (معجون یوما)', 
                 price: 95000, 
-                img: 'https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=400&q=80' 
+                img: 'https://img.freepik.com/free-photo/mixture-nuts-dried-fruits-healthy-snack_23-2148849718.jpg?w=400' 
             }
         ];
 
@@ -101,9 +106,9 @@
             grid.innerHTML = products.map(p => {
                 const count = cart[p.id] || 0;
                 return `
-                <div class="bg-white p-3 rounded-[2.5rem] border border-rose-50 shadow-sm text-center relative product-card overflow-hidden transition-all">
-                    ${isAdmin ? `<button onclick="removeProduct(${p.id})" class="absolute top-2 left-2 bg-red-500 text-white w-6 h-6 rounded-full text-xs z-10">×</button>` : ''}
-                    <img src="${p.img}" alt="${p.name}" class="mb-3 shadow-md">
+                <div class="bg-white p-3 rounded-[2.5rem] border border-rose-50 shadow-sm text-center relative product-card overflow-hidden">
+                    ${isAdmin ? `<button onclick="removeProduct(${p.id})" class="absolute top-2 left-2 bg-red-500 text-white w-6 h-6 rounded-full text-[10px] z-10 flex items-center justify-center">×</button>` : ''}
+                    <img src="${p.img}" alt="${p.name}" onerror="this.src='https://via.placeholder.com/400x300?text=Yuma+Sweets'" class="mb-3 shadow-md">
                     <h3 class="text-[11px] font-black text-slate-800 mb-1">${p.name}</h3>
                     <p class="text-[10px] text-rose-400 font-bold mb-3">${p.price.toLocaleString()} تومان</p>
                     <button onclick="addToCart(${p.id})" class="w-full bg-slate-900 text-white py-2.5 rounded-2xl text-[9px] font-black ${!currentUser ? 'opacity-20' : ''}">
@@ -114,15 +119,14 @@
 
             if (isAdmin) {
                 grid.innerHTML += `
-                <button onclick="openAdmin()" class="border-2 border-dashed border-blue-200 rounded-[2.5rem] p-5 flex flex-col items-center justify-center text-blue-400 bg-blue-50/10">
+                <button onclick="openAdmin()" class="border-2 border-dashed border-blue-200 rounded-[2.5rem] p-5 flex flex-col items-center justify-center text-blue-400 bg-blue-50/10 transition-all active:scale-95">
                     <span class="text-3xl font-bold">+</span>
-                    <span class="text-[9px] font-black italic">افزودن محصول جدید</span>
+                    <span class="text-[9px] font-black italic">افزودن شیرینی جدید</span>
                 </button>`;
             }
             updateTotal();
         }
 
-        // توابع اصلی
         function handleAuth() {
             const name = document.getElementById('authName').value;
             const phone = document.getElementById('authPhone').value;
@@ -135,10 +139,10 @@
             document.getElementById('userInfo').innerHTML = `
                 <div class="flex flex-col items-end">
                     <span class="text-[10px] font-black text-slate-500">${name} عزیز خوش آمدی ✨</span>
-                    <button onclick="location.reload()" class="text-[9px] text-rose-400 underline">خروج</button>
+                    <button onclick="location.reload()" class="text-[9px] text-rose-400 font-bold underline">خروج</button>
                 </div>`;
 
-            document.getElementById('mainActionBtn').innerText = isAdmin ? "پنل مدیریت نادر فعال" : "ثبت نهایی سفارش";
+            document.getElementById('mainActionBtn').innerText = isAdmin ? "پنل مدیریت ادمین فعال" : "ثبت نهایی سفارش";
             document.getElementById('totalPanel').classList.remove('opacity-40');
             render();
         }
@@ -165,7 +169,7 @@
         function addNewProduct() {
             const name = document.getElementById('pName').value;
             const price = parseInt(document.getElementById('pPrice').value);
-            const img = document.getElementById('pImgUrl').value || 'https://picsum.photos/400/300';
+            const img = document.getElementById('pImgUrl').value || 'https://via.placeholder.com/400x300?text=New+Sweet';
             if (!name || !price) return alert("نام و قیمت اجباری است");
             products.push({ id: Date.now(), name, price, img });
             closeAdmin();
@@ -177,6 +181,7 @@
         }
 
         function showAuth() { document.getElementById('authModal').classList.remove('hidden'); }
+        function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
 
         render();
     </script>
