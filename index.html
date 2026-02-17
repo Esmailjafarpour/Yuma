@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>یوما | نسخه پیشرفته</title>
+    <title>یوما | طعم اصیل خانگی</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -20,18 +20,24 @@
 <body class="pb-56">
 
     <header class="p-6 sticky top-0 z-50 backdrop-blur-md border-b border-rose-100/20 flex justify-between items-center">
-        <div class="flex flex-col">
-            <div class="flex gap-2 items-center">
-                <h1 class="text-2xl font-black text-purple-600 dark:text-purple-400">یوما</h1>
-            </div>
-            <span class="text-[9px] font-bold text-green-500">طعم اصیل خانگی</span>
-        </div>
         <div class="flex items-center gap-2">
-            <button onclick="toggleTheme()" class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg">
+            <svg width="35" height="35" viewBox="0 0 24 24" fill="none" class="text-rose-500">
+                <path d="M4 17C4 17 5 19 12 19C19 19 20 17 20 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M3 15L21 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="12" cy="9" r="2" fill="currentColor" opacity="0.3"/>
+            </svg>
+            <div class="flex flex-col">
+                <h1 class="text-2xl font-black text-purple-600 dark:text-purple-400 leading-tight">یوما</h1>
+                <span class="text-[8px] font-bold text-green-500">تولید خانگی نادر</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg">
                 <span id="themeIcon">🌙</span>
             </button>
-            <div id="userInfo">
-                <button onclick="showAuth()" class="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-900/30 px-4 py-2 rounded-xl">ورود</button>
+            <div id="userInfo" class="flex items-center gap-2">
+                <button onclick="showAuth()" class="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-900/30 px-4 py-2 rounded-xl border border-rose-200/20">ورود</button>
             </div>
         </div>
     </header>
@@ -44,13 +50,13 @@
                 <span id="finalTotal" class="text-xl font-black text-rose-600">۰</span>
                 <span class="text-[10px] font-bold">تومان</span>
             </div>
-            <button onclick="showHistory()" class="text-[10px] font-black bg-slate-100 dark:bg-slate-800 px-3 py-1 rounded-lg">📋 تاریخچه سبد</button>
+            <button onclick="showHistory()" class="text-[10px] font-black bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg">📋 سبد من</button>
             <div class="flex items-center gap-2">
                 <span id="cartBadge" class="bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
                 <span class="text-2xl">🛒</span>
             </div>
         </div>
-        <button id="mainActionBtn" onclick="handleFinalAction()" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg">ابتدا وارد شوید</button>
+        <button id="mainActionBtn" onclick="handleFinalAction()" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg active:scale-95 transition-transform">ابتدا وارد شوید</button>
     </div>
 
     <div id="authModal" class="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-6">
@@ -83,12 +89,10 @@
 
         function render() {
             const grid = document.getElementById('productGrid');
-            const isAdmin = currentUser && adminPhones.includes(currentUser.phone);
-            
             grid.innerHTML = products.map(p => {
                 const count = cart[p.id] || 0;
                 return `
-                <div class="product-card p-3 rounded-[2.5rem] shadow-sm text-center relative overflow-hidden">
+                <div class="product-card p-3 rounded-[2.5rem] shadow-sm text-center relative overflow-hidden transition-all">
                     <div class="img-container mb-3 flex items-center justify-center">
                         <div class="emoji-fallback">${p.emoji}</div>
                         <img src="${p.img}" class="product-img relative z-10 w-full h-full object-cover" onload="this.style.opacity=1" onerror="this.style.display='none'">
@@ -96,10 +100,10 @@
                     <h3 class="text-[11px] font-black mb-1">${p.name}</h3>
                     <p class="text-[10px] text-rose-400 font-bold mb-3">${p.price.toLocaleString()} تومان</p>
                     
-                    <div class="flex items-center justify-between bg-slate-100 dark:bg-slate-800 rounded-2xl p-1">
-                        <button onclick="updateQty(${p.id}, 1)" class="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl shadow-sm text-xl font-bold">+</button>
+                    <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-1 border border-rose-100/10">
+                        <button onclick="updateQty(${p.id}, 1)" class="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl shadow-sm text-lg font-bold">+</button>
                         <span class="text-xs font-black">${count}</span>
-                        <button onclick="updateQty(${p.id}, -1)" class="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl shadow-sm text-xl font-bold">-</button>
+                        <button onclick="updateQty(${p.id}, -1)" class="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl shadow-sm text-lg font-bold">-</button>
                     </div>
                 </div>`;
             }).join('');
@@ -115,35 +119,49 @@
         function handleAuth() {
             const name = document.getElementById('authName').value;
             const phone = document.getElementById('authPhone').value.trim();
-            if(name.length < 2 || phone.length < 11) return alert("اطلاعات را کامل وارد کنید");
+            if(name.length < 2 || phone.length < 11) return alert("اطلاعات ناقص است");
             
             currentUser = { name, phone };
             document.getElementById('authModal').classList.add('hidden');
-            document.getElementById('userInfo').innerHTML = `<span class="text-[9px] font-black text-rose-500">${name} عزیز</span>`;
+            
+            // تغییر دکمه به خروج
+            document.getElementById('userInfo').innerHTML = `
+                <div class="flex items-center gap-2">
+                    <span class="text-[8px] font-black text-slate-400 hidden sm:block">${name}</span>
+                    <button onclick="logout()" class="text-[9px] font-bold text-white bg-rose-500 px-3 py-1.5 rounded-lg shadow-sm">خروج</button>
+                </div>`;
+
             document.getElementById('mainActionBtn').innerText = "ثبت نهایی سفارش";
             document.getElementById('totalPanel').classList.remove('opacity-40');
             render();
         }
 
+        function logout() {
+            if(confirm("آیا می‌خواهید از حساب خود خارج شوید؟")) {
+                location.reload(); // ساده‌ترین راه برای ریست کردن وضعیت
+            }
+        }
+
         function handleFinalAction() {
             if(!currentUser) return showAuth();
-            if(Object.keys(cart).every(k => cart[k] === 0)) return alert("سبد خرید خالی است!");
+            let hasItem = Object.values(cart).some(q => q > 0);
+            if(!hasItem) return alert("سبد خرید شما خالی است!");
             showHistory();
         }
 
         function showHistory() {
             if(!currentUser) return showAuth();
-            let summary = `📜 پیش‌فاکتور مشتری: ${currentUser.name}\n\n`;
+            let summary = `🛒 لیست خرید ${currentUser.name}:\n\n`;
             let total = 0;
             for(let id in cart) {
                 if(cart[id] > 0) {
                     const p = products.find(x => x.id == id);
-                    summary += `▪️ ${p.name} (${cart[id]} عدد): ${(p.price * cart[id]).toLocaleString()} ت\n`;
+                    summary += `▪️ ${p.name}: ${cart[id]} عدد\n`;
                     total += p.price * cart[id];
                 }
             }
-            if(total === 0) return alert("هنوز چیزی انتخاب نکرده‌اید!");
-            summary += `\n💰 جمع کل: ${total.toLocaleString()} تومان`;
+            if(total === 0) return alert("سبد خرید خالی است!");
+            summary += `\n💰 مبلغ قابل پرداخت: ${total.toLocaleString()} تومان`;
             alert(summary);
         }
 
