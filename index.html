@@ -3,33 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Yuma | ورود و ثبت‌نام</title>
+    <title>یوما | سبد خرید هوشمند</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Vazirmatn', sans-serif; background-color: #fffafb; }
         .yuma-gradient { background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%); }
         .hidden { display: none; }
+        .modal-animate { animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     </style>
 </head>
 <body class="pb-48">
 
+    <div id="cartModal" class="fixed inset-0 z-[250] bg-black/60 backdrop-blur-sm hidden flex items-end justify-center">
+        <div class="bg-white w-full max-w-md rounded-t-[3rem] p-8 modal-animate max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-black text-slate-800">سبد خرید شما</h2>
+                <button onclick="closeCart()" class="text-slate-400 font-bold text-sm">بستن ×</button>
+            </div>
+            
+            <div id="cartItemsList" class="space-y-4 mb-8 text-right">
+                </div>
+
+            <div class="border-t pt-6">
+                <div class="flex justify-between items-center mb-6 text-right">
+                    <span class="font-black text-slate-400 text-sm">جمع کل سفارش:</span>
+                    <span id="cartModalTotal" class="text-xl font-black text-rose-600">۰ تومان</span>
+                </div>
+                <button onclick="submitOrder()" class="w-full yuma-gradient text-white py-4 rounded-2xl font-black shadow-lg">ثبت و نهایی کردن خرید</button>
+            </div>
+        </div>
+    </div>
+
     <div id="authModal" class="fixed inset-0 z-[200] bg-black/60 backdrop-blur-md hidden flex items-center justify-center p-6 text-right">
         <div class="bg-white w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl">
             <h2 id="authTitle" class="text-2xl font-black mb-6 text-slate-800">ورود به یوما</h2>
-            
             <div class="space-y-4">
                 <input type="text" id="authUsername" placeholder="نام کاربری" class="w-full bg-slate-50 border p-4 rounded-2xl outline-none focus:border-rose-400 font-bold">
                 <input type="password" id="authPassword" placeholder="رمز عبور" class="w-full bg-slate-50 border p-4 rounded-2xl outline-none focus:border-rose-400 font-bold">
-                
-                <button id="authBtn" onclick="handleAuth()" class="w-full yuma-gradient text-white py-4 rounded-2xl font-black shadow-lg">تایید ورود</button>
-                
+                <button id="authBtn" onclick="handleAuth()" class="w-full yuma-gradient text-white py-4 rounded-2xl font-black shadow-lg">تایید</button>
                 <p class="text-center text-[10px] text-slate-400 font-bold mt-4">
                     <span id="authQuestion">حساب کاربری ندارید؟</span>
                     <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-rose-600 mr-1 underline">ثبت‌نام کنید</button>
                 </p>
-                
-                <button onclick="closeAuth()" class="w-full text-slate-300 text-[10px] font-bold mt-2 italic text-center">بستن</button>
+                <button onclick="closeAuth()" class="w-full text-slate-300 text-[10px] font-bold mt-2 text-center italic">بستن</button>
             </div>
         </div>
     </div>
@@ -37,25 +55,15 @@
     <header class="p-6 bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-rose-50 flex justify-between items-center">
         <div class="flex flex-col">
             <div class="flex gap-2 items-center">
-                <h1 class="text-xl font-black text-purple-700 leading-none">یوما</h1>
-                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-purple-500">
+                <h1 class="text-2xl font-black text-purple-700 leading-none">یوما</h1>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-rose-500">
                     <path d="M4 15H20L21 18H3L4 15Z" fill="currentColor" opacity="0.3"/>
                     <path d="M3 17H21" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    
-                    <circle cx="8" cy="13" r="2" fill="currentColor"/>
-                    <circle cx="12" cy="11" r="2.5" fill="currentColor"/>
-                    <circle cx="16" cy="13" r="2" fill="currentColor"/>
-                    
-                    <path d="M2 19C4 21 6 21 7 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M22 19C20 21 18 21 17 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    
-                    <path d="M12 6V3" stroke="#FDA4AF" stroke-width="1" stroke-linecap="round"/>
-                    <path d="M15 7L17 5" stroke="#FDA4AF" stroke-width="1" stroke-linecap="round"/>
-                    <path d="M9 7L7 5" stroke="#FDA4AF" stroke-width="1" stroke-linecap="round"/>
+                    <circle cx="8" cy="13" r="2" fill="currentColor"/><circle cx="12" cy="11" r="2.5" fill="currentColor"/><circle cx="16" cy="13" r="2" fill="currentColor"/>
+                    <path d="M2 19C4 21 6 21 7 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M22 19C20 21 18 21 17 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    <path d="M12 6V3" stroke="#FDA4AF" stroke-width="1" stroke-linecap="round"/><path d="M15 7L17 5" stroke="#FDA4AF" stroke-width="1" stroke-linecap="round"/><path d="M9 7L7 5" stroke="#FDA4AF" stroke-width="1" stroke-linecap="round"/>
                 </svg>
-               
             </div>
-            
             <span class="text-[10px] font-bold text-green-500 mt-1">شیرینی خانگی با طعم مادرانه</span>
         </div>
         <div id="userInfo" class="flex items-center gap-3">
@@ -65,12 +73,18 @@
 
     <main class="p-6 grid grid-cols-2 gap-4" id="productGrid"></main>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-20px_50px_rgba(0,0,0,0.1)] rounded-t-[3rem] p-8 z-40 text-right">
-        <div id="totalPanel" class="flex justify-between items-center mb-6 opacity-40">
-            <span class="font-black text-slate-400 text-sm">مبلغ سبد خرید:</span>
+    <div onclick="openCart()" class="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-20px_50px_rgba(0,0,0,0.1)] rounded-t-[3rem] p-8 z-40 text-right cursor-pointer">
+        <div id="totalPanel" class="flex justify-between items-center mb-6 opacity-40 transition-all">
+            <div class="flex items-center gap-2">
+                <div class="relative">
+                    <span class="text-2xl">🛒</span>
+                    <span id="cartBadge" class="absolute -top-1 -right-1 bg-purple-600 text-white text-[8px] w-4 h-4 rounded-full flex items-center justify-center font-bold">0</span>
+                </div>
+                <span class="font-black text-slate-400 text-xs">مشاهده سبد خرید</span>
+            </div>
             <span id="finalTotal" class="text-xl font-black text-rose-600">۰ تومان</span>
         </div>
-        <button id="mainActionBtn" onclick="showAuth('login')" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg shadow-rose-200">
+        <button id="mainActionBtn" onclick="event.stopPropagation(); showAuth('login')" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg shadow-rose-200">
             برای ثبت سفارش وارد شوید
         </button>
     </div>
@@ -90,63 +104,43 @@
             { id: 3, name: 'کیک ردولوت', price: 420000, img: '🍰' }
         ];
 
-        function showAuth(mode) {
-            isLoginMode = (mode === 'login');
-            updateAuthUI();
-            document.getElementById('authModal').classList.remove('hidden');
+        function openCart() {
+            if (Object.keys(cart).length === 0) return alert("سبد خرید شما هنوز خالی است!");
+            renderCartModal();
+            document.getElementById('cartModal').classList.remove('hidden');
         }
 
-        function toggleAuthMode() {
-            isLoginMode = !isLoginMode;
-            updateAuthUI();
-        }
+        function closeCart() { document.getElementById('cartModal').classList.add('hidden'); }
 
-        function updateAuthUI() {
-            document.getElementById('authTitle').innerText = isLoginMode ? "ورود به یوما" : "عضویت در یوما";
-            document.getElementById('authBtn').innerText = isLoginMode ? "تایید ورود" : "ایجاد حساب کاربری";
-            document.getElementById('authQuestion').innerText = isLoginMode ? "حساب کاربری ندارید؟" : "قبلاً ثبت‌نام کرده‌اید؟";
-            document.getElementById('authToggleBtn').innerText = isLoginMode ? "ثبت‌نام کنید" : "وارد شوید";
-        }
+        function renderCartModal() {
+            const list = document.getElementById('cartItemsList');
+            let html = '';
+            let total = 0;
 
-        function handleAuth() {
-            const u = document.getElementById('authUsername').value;
-            const p = document.getElementById('authPassword').value;
-
-            if (!u || !p) return alert("لطفاً فیلدها را پر کنید!");
-
-            if (isLoginMode) {
-                // منطق ورود
-                if (users[u] && users[u] === p) {
-                    successLogin(u);
-                } else {
-                    alert("نام کاربری یا رمز عبور اشتباه است!");
-                }
-            } else {
-                // منطق ثبت‌نام
-                if (users[u]) {
-                    alert("این نام کاربری قبلاً انتخاب شده است.");
-                } else {
-                    users[u] = p;
-                    alert("ثبت‌نام با موفقیت انجام شد! حالا وارد شوید.");
-                    isLoginMode = true;
-                    updateAuthUI();
-                }
+            for (let id in cart) {
+                const p = products.find(x => x.id == id);
+                const itemTotal = p.price * cart[id];
+                total += itemTotal;
+                html += `
+                <div class="flex justify-between items-center bg-slate-50 p-4 rounded-2xl">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">${p.img}</span>
+                        <div>
+                            <h4 class="text-xs font-black text-slate-800">${p.name}</h4>
+                            <p class="text-[10px] text-slate-400">${p.price.toLocaleString()} تومان</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 bg-white px-3 py-1 rounded-xl border">
+                        <button onclick="changeQty(${p.id}, 1)" class="text-rose-600 font-bold">+</button>
+                        <span class="text-xs font-black">${cart[id]}</span>
+                        <button onclick="changeQty(${p.id}, -1)" class="text-slate-400 font-bold">-</button>
+                    </div>
+                </div>`;
             }
+            list.innerHTML = html;
+            document.getElementById('cartModalTotal').innerText = total.toLocaleString() + ' تومان';
         }
 
-        function successLogin(username) {
-            isLoggedIn = true;
-            document.getElementById('authModal').classList.add('hidden');
-            document.getElementById('userInfo').innerHTML = `<span class="text-[10px] font-black text-slate-500">${username} عزیز خوش آمدی ✨</span>`;
-            document.getElementById('mainActionBtn').innerText = "ثبت نهایی سفارش در یوما";
-            document.getElementById('mainActionBtn').onclick = submitOrder;
-            document.getElementById('totalPanel').classList.remove('opacity-40');
-            render();
-        }
-
-        function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
-
-        // کدهای رندر و سبد خرید (مشابه قبل)
         function render() {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = products.map(p => {
@@ -158,17 +152,18 @@
                     <p class="text-[10px] text-rose-400 font-bold mb-4">${p.price.toLocaleString()} تومان</p>
                     <div class="${!isLoggedIn ? 'opacity-40' : ''}">
                         ${count === 0 ? 
-                            `<button onclick="${isLoggedIn ? `changeQty(${p.id}, 1)` : 'showAuth(\'login\')'}" class="w-full bg-slate-900 text-white py-3 rounded-2xl text-[10px] font-black">+ افزودن</button>` :
+                            `<button onclick="event.stopPropagation(); ${isLoggedIn ? `changeQty(${p.id}, 1)` : 'showAuth(\'login\')'}" class="w-full bg-slate-900 text-white py-3 rounded-2xl text-[10px] font-black">+ افزودن</button>` :
                             `<div class="flex items-center justify-between bg-rose-600 rounded-2xl p-1 text-white">
-                                <button onclick="changeQty(${p.id}, 1)" class="w-8 h-8 flex items-center justify-center font-bold text-lg">+</button>
+                                <button onclick="event.stopPropagation(); changeQty(${p.id}, 1)" class="w-8 h-8 flex items-center justify-center font-bold text-lg">+</button>
                                 <span class="text-xs font-black">${count}</span>
-                                <button onclick="changeQty(${p.id}, -1)" class="w-8 h-8 flex items-center justify-center font-bold text-lg">-</button>
+                                <button onclick="event.stopPropagation(); changeQty(${p.id}, -1)" class="w-8 h-8 flex items-center justify-center font-bold text-lg">-</button>
                             </div>`
                         }
                     </div>
                 </div>`;
             }).join('');
             updateTotal();
+            if(!document.getElementById('cartModal').classList.contains('hidden')) renderCartModal();
         }
 
         function changeQty(id, delta) {
@@ -176,21 +171,57 @@
             cart[id] = (cart[id] || 0) + delta;
             if (cart[id] <= 0) delete cart[id];
             render();
+            if (Object.keys(cart).length === 0) closeCart();
         }
 
         function updateTotal() {
-            let price = 0;
+            let price = 0; let count = 0;
             for (let id in cart) {
                 let p = products.find(x => x.id == id);
                 price += (cart[id] * p.price);
+                count += cart[id];
             }
             document.getElementById('finalTotal').innerText = price.toLocaleString() + ' تومان';
+            document.getElementById('cartBadge').innerText = count;
+            document.getElementById('totalPanel').style.opacity = count > 0 ? "1" : "0.4";
         }
+
+        function handleAuth() {
+            const u = document.getElementById('authUsername').value;
+            const p = document.getElementById('authPassword').value;
+            if (!u || !p) return alert("لطفاً فیلدها را پر کنید!");
+            if (isLoginMode) {
+                if (users[u] && users[u] === p) { successLogin(u); } 
+                else { alert("نام کاربری یا رمز عبور اشتباه است!"); }
+            } else {
+                users[u] = p; alert("ثبت‌نام انجام شد! حالا وارد شوید.");
+                isLoginMode = true; updateAuthUI();
+            }
+        }
+
+        function successLogin(username) {
+            isLoggedIn = true;
+            document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('userInfo').innerHTML = `<span class="text-[10px] font-black text-slate-500">${username} خوش آمدی ✨</span>`;
+            document.getElementById('mainActionBtn').innerText = "ثبت نهایی سفارش در یوما";
+            document.getElementById('mainActionBtn').onclick = (e) => { e.stopPropagation(); submitOrder(); };
+            document.getElementById('totalPanel').classList.remove('opacity-40');
+            render();
+        }
+
+        function showAuth(mode) { isLoginMode = (mode === 'login'); updateAuthUI(); document.getElementById('authModal').classList.remove('hidden'); }
+        function toggleAuthMode() { isLoginMode = !isLoginMode; updateAuthUI(); }
+        function updateAuthUI() {
+            document.getElementById('authTitle').innerText = isLoginMode ? "ورود به یوما" : "عضویت در یوما";
+            document.getElementById('authBtn').innerText = isLoginMode ? "تایید ورود" : "ایجاد حساب کاربری";
+            document.getElementById('authToggleBtn').innerText = isLoginMode ? "ثبت‌نام کنید" : "وارد شوید";
+        }
+        function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
 
         function submitOrder() {
             if (Object.keys(cart).length === 0) return alert("سبد خرید خالی است!");
-            alert("سفارش شما در یوما ثبت شد!");
-            cart = {}; render();
+            alert("نادر جان، سفارش با موفقیت ثبت شد! 🚀");
+            cart = {}; closeCart(); render();
         }
 
         render();
