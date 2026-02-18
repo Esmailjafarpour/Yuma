@@ -11,36 +11,31 @@
         .dark { --bg: #0f172a; --text: #f8fafc; --card: #1e293b; }
         body { font-family: 'Vazirmatn', sans-serif; background-color: var(--bg); color: var(--text); transition: all 0.4s; }
         .yuma-gradient { background: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%); }
+        .hidden { display: none; }
         .img-container { width: 100%; height: 130px; border-radius: 1.5rem; overflow: hidden; background: #fff1f2; position: relative; }
         .product-card { background-color: var(--card); border: 1px solid rgba(244, 63, 94, 0.1); }
-        .emoji-fallback { position: absolute; inset: 0; display: flex; items-center; justify-content: center; font-size: 2.5rem; z-index: 5; background: #fff1f2; }
+        .emoji-fallback { position: absolute; inset: 0; display: flex; items-center; justify-content: center; font-size: 2.5rem; background: #fff1f2; }
         .dark .emoji-fallback, .dark .img-container { background: #334155; }
     </style>
 </head>
 <body class="pb-56">
 
-    <header class="p-6 sticky top-0 z-50 backdrop-blur-md border-b border-rose-100/20 flex justify-between items-center">
+    <header class="p-4 sticky top-0 z-50 backdrop-blur-md border-b border-rose-100/20 flex justify-between items-center bg-white/70 dark:bg-slate-900/70">
         <div class="flex items-center gap-2">
-            <div class="flex flex-col">
-                <div class="flex gap-2">
-                    <h1 class="text-2xl font-black text-purple-600 dark:text-purple-400 leading-tight">یوما</h1>
-                <svg width="35" height="35" viewBox="0 0 24 24" fill="none" class="text-rose-500">
-                    <path d="M4 17C4 17 5 19 12 19C19 19 20 17 20 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M3 15L21 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-                    <circle cx="12" cy="9" r="2" fill="currentColor" opacity="0.3"/>
-                </svg>
-                </div>
-                
-                <span class="text-[8px] font-bold text-green-500">شیرینی خانگی با طعم مادرانه </span>
-            </div>
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" class="text-rose-500">
+                <path d="M4 17C4 17 5 19 12 19C19 19 20 17 20 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M3 15L21 15" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="12" cy="9" r="2" fill="currentColor" opacity="0.3"/>
+            </svg>
+            <h1 class="text-xl font-black text-purple-600 dark:text-purple-400">یوما</h1>
         </div>
 
         <div class="flex items-center gap-2">
-            <button onclick="toggleTheme()" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg">
+            <button onclick="toggleTheme()" class="w-8 h-8 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
                 <span id="themeIcon">🌙</span>
             </button>
-            <div id="userInfo" class="flex items-center gap-2">
-                <button onclick="showAuth()" class="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-900/30 px-4 py-2 rounded-xl border border-rose-200/20">ورود</button>
+            <div id="userInfo" class="text-left">
+                <button onclick="showAuth()" class="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-900/30 px-4 py-2 rounded-xl">ورود</button>
             </div>
         </div>
     </header>
@@ -53,23 +48,44 @@
                 <span id="finalTotal" class="text-xl font-black text-rose-600">۰</span>
                 <span class="text-[10px] font-bold">تومان</span>
             </div>
-            <button onclick="showHistory()" class="text-[10px] font-black bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-lg">📋 سبد من</button>
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-1">
                 <span id="cartBadge" class="bg-purple-600 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
                 <span class="text-2xl">🛒</span>
             </div>
         </div>
-        <button id="mainActionBtn" onclick="handleFinalAction()" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg active:scale-95 transition-transform">ابتدا وارد شوید</button>
+        <button id="mainActionBtn" onclick="openCartModal()" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black shadow-lg">مشاهده سبد خرید</button>
     </div>
 
     <div id="authModal" class="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-6">
         <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl">
-            <h2 class="text-xl font-black mb-6 dark:text-white text-right">خوش آمدید</h2>
+            <h2 class="text-xl font-black mb-6 dark:text-white text-right">ورود کاربر</h2>
             <div class="space-y-4">
                 <input type="text" id="authName" placeholder="نام شما" class="w-full border dark:border-slate-700 p-4 rounded-2xl outline-none font-bold bg-slate-50 dark:bg-slate-900 dark:text-white">
                 <input type="tel" id="authPhone" placeholder="شماره موبایل" class="w-full border dark:border-slate-700 p-4 rounded-2xl outline-none font-bold text-left bg-slate-50 dark:bg-slate-900 dark:text-white">
                 <button onclick="handleAuth()" class="w-full yuma-gradient text-white py-4 rounded-2xl font-black">تایید و ورود</button>
-                <button onclick="closeAuth()" class="w-full text-slate-400 text-[10px] mt-2 text-center">انصراف</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cartModal" class="fixed inset-0 z-[300] bg-black/70 backdrop-blur-md hidden flex flex-col justify-end">
+        <div class="bg-white dark:bg-slate-800 w-full h-[70vh] rounded-t-[3rem] p-8 overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-black dark:text-white">🛒 سبد خرید شما</h2>
+                <button onclick="closeCartModal()" class="w-8 h-8 bg-slate-100 dark:bg-slate-700 rounded-full font-bold">✕</button>
+            </div>
+            <div id="cartItemsList" class="space-y-4 mb-6"></div>
+            <button onclick="submitOrder()" class="w-full yuma-gradient text-white py-5 rounded-2xl font-black">تایید نهایی سفارش</button>
+        </div>
+    </div>
+
+    <div id="historyModal" class="fixed inset-0 z-[400] bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-6">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-[2.5rem] p-8 shadow-2xl max-h-[80vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-black dark:text-white">📜 تاریخچه خریدها</h2>
+                <button onclick="closeHistoryModal()" class="text-xl font-bold">✕</button>
+            </div>
+            <div id="historyContent" class="space-y-4 text-sm text-slate-500 dark:text-slate-400">
+                هنوز سفارشی ثبت نکرده‌اید.
             </div>
         </div>
     </div>
@@ -84,6 +100,7 @@
 
         let currentUser = null;
         let cart = {};
+        let orderHistory = [];
 
         function toggleTheme() {
             document.body.classList.toggle('dark');
@@ -103,11 +120,14 @@
                     <h3 class="text-[11px] font-black mb-1">${p.name}</h3>
                     <p class="text-[10px] text-rose-400 font-bold mb-3">${p.price.toLocaleString()} تومان</p>
                     
-                    <div class="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-1 border border-rose-100/10">
-                        <button onclick="updateQty(${p.id}, 1)" class="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl shadow-sm text-lg font-bold">+</button>
-                        <span class="text-xs font-black">${count}</span>
-                        <button onclick="updateQty(${p.id}, -1)" class="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl shadow-sm text-lg font-bold">-</button>
-                    </div>
+                    ${count === 0 
+                        ? `<button onclick="updateQty(${p.id}, 1)" class="w-full bg-slate-900 dark:bg-slate-700 text-white py-2.5 rounded-2xl text-[10px] font-black">+ افزودن</button>`
+                        : `<div class="flex items-center justify-between bg-slate-100 dark:bg-slate-800 rounded-2xl p-1">
+                                <button onclick="updateQty(${p.id}, 1)" class="w-7 h-7 flex items-center justify-center bg-white dark:bg-slate-700 rounded-lg shadow text-lg font-bold">+</button>
+                                <span class="text-xs font-black">${count}</span>
+                                <button onclick="updateQty(${p.id}, -1)" class="w-7 h-7 flex items-center justify-center bg-white dark:bg-slate-700 rounded-lg shadow text-lg font-bold">-</button>
+                           </div>`
+                    }
                 </div>`;
             }).join('');
             updateTotal();
@@ -122,51 +142,77 @@
         function handleAuth() {
             const name = document.getElementById('authName').value;
             const phone = document.getElementById('authPhone').value.trim();
-            if(name.length < 2 || phone.length < 11) return alert("اطلاعات ناقص است");
-            
+            if(name.length < 2 || phone.length < 11) return alert("اطلاعات را کامل وارد کنید");
             currentUser = { name, phone };
             document.getElementById('authModal').classList.add('hidden');
             
-            // تغییر دکمه به خروج
+            // نمایش نام کاربر، دکمه تاریخچه و دکمه خروج در هدر
             document.getElementById('userInfo').innerHTML = `
-                <div class="flex items-center gap-2">
-                    <span class="text-[8px] font-black text-slate-400 hidden sm:block">${name}</span>
-                    <button onclick="logout()" class="text-[9px] font-bold text-white bg-rose-500 px-3 py-1.5 rounded-lg shadow-sm">خروج</button>
+                <div class="flex flex-col items-end gap-1">
+                    <div class="flex items-center gap-2">
+                        <span class="text-[9px] font-black text-slate-500">${name}</span>
+                        <button onclick="location.reload()" class="text-[8px] bg-red-100 text-red-500 px-2 py-0.5 rounded-md">خروج</button>
+                    </div>
+                    <button onclick="openHistoryModal()" class="text-[8px] font-black text-blue-500 underline">📜 تاریخچه سفارشات</button>
                 </div>`;
 
-            document.getElementById('mainActionBtn').innerText = "ثبت نهایی سفارش";
             document.getElementById('totalPanel').classList.remove('opacity-40');
             render();
         }
 
-        function logout() {
-            if(confirm("آیا می‌خواهید از حساب خود خارج شوید؟")) {
-                location.reload(); // ساده‌ترین راه برای ریست کردن وضعیت
-            }
-        }
-
-        function handleFinalAction() {
+        function openCartModal() {
             if(!currentUser) return showAuth();
-            let hasItem = Object.values(cart).some(q => q > 0);
-            if(!hasItem) return alert("سبد خرید شما خالی است!");
-            showHistory();
-        }
-
-        function showHistory() {
-            if(!currentUser) return showAuth();
-            let summary = `🛒 لیست خرید ${currentUser.name}:\n\n`;
-            let total = 0;
+            const list = document.getElementById('cartItemsList');
+            let content = ''; let hasItem = false;
             for(let id in cart) {
                 if(cart[id] > 0) {
+                    hasItem = true;
                     const p = products.find(x => x.id == id);
-                    summary += `▪️ ${p.name}: ${cart[id]} عدد\n`;
-                    total += p.price * cart[id];
+                    content += `<div class="flex justify-between bg-slate-50 dark:bg-slate-900 p-4 rounded-2xl">
+                        <span class="font-black text-xs">${p.name} (${cart[id]} عدد)</span>
+                        <span class="text-rose-500 text-xs">${(p.price * cart[id]).toLocaleString()} ت</span>
+                    </div>`;
                 }
             }
-            if(total === 0) return alert("سبد خرید خالی است!");
-            summary += `\n💰 مبلغ قابل پرداخت: ${total.toLocaleString()} تومان`;
-            alert(summary);
+            list.innerHTML = hasItem ? content : '<p class="text-center text-slate-400">سبد خرید خالی است</p>';
+            document.getElementById('cartModal').classList.remove('hidden');
         }
+
+        function submitOrder() {
+            let orderItems = [];
+            for(let id in cart) if(cart[id] > 0) orderItems.push({id, qty: cart[id]});
+            if(orderItems.length === 0) return alert("سبد خالی است");
+            
+            // اضافه کردن به تاریخچه
+            orderHistory.push({ date: new Date().toLocaleTimeString('fa-IR'), items: orderItems });
+            alert("سفارش شما با موفقیت ثبت و به تاریخچه اضافه شد!");
+            cart = {};
+            closeCartModal();
+            render();
+        }
+
+        function openHistoryModal() {
+            const content = document.getElementById('historyContent');
+            if(orderHistory.length === 0) {
+                content.innerHTML = "هنوز سفارشی ثبت نکرده‌اید.";
+            } else {
+                content.innerHTML = orderHistory.map((order, idx) => `
+                    <div class="border-b dark:border-slate-700 pb-3 mb-3">
+                        <div class="font-bold text-rose-500 mb-1">سفارش شماره ${idx + 1} - ساعت ${order.date}</div>
+                        ${order.items.map(item => {
+                            const p = products.find(x => x.id == item.id);
+                            return `<div>• ${p.name} (${item.qty} عدد)</div>`;
+                        }).join('')}
+                    </div>
+                `).join('');
+            }
+            document.getElementById('historyModal').classList.remove('hidden');
+        }
+
+        function closeHistoryModal() { document.getElementById('historyModal').classList.add('hidden'); }
+        function closeCartModal() { document.getElementById('cartModal').classList.remove('hidden'); }
+        function showAuth() { document.getElementById('authModal').classList.remove('hidden'); }
+        function closeCartModal() { document.getElementById('cartModal').classList.add('hidden'); }
 
         function updateTotal() {
             let total = 0; let count = 0;
@@ -177,9 +223,6 @@
             document.getElementById('finalTotal').innerText = total.toLocaleString();
             document.getElementById('cartBadge').innerText = count;
         }
-
-        function showAuth() { document.getElementById('authModal').classList.remove('hidden'); }
-        function closeAuth() { document.getElementById('authModal').classList.add('hidden'); }
 
         render();
     </script>
